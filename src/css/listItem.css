@@ -1,0 +1,70 @@
+/* Style for list item */
+li {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Style for image */
+ img {
+    max-width: 300px;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for title */
+  h2 {
+    margin: 0;
+    margin-bottom: 5px;
+  }
+  
+  /* Style for buttons container */
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Style for buttons */
+  button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #97BC62; /* Light Green background */
+    color: white;
+    cursor: pointer;
+  }
+  
+  /* Style for buttons on hover */
+  button:hover {
+    background-color: #5e8e3d; /* Darker shade on hover */
+  }
+  
+  /* Style for detail text */
+  p {
+    margin: 0;
+  }
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+    li {
+      flex-direction: column;
+    }
+  
+    img {
+      width: 100%;
+    }
+  
+    .button-container {
+      flex-direction: column;
+    }
+  
+    button {
+      margin-top: 10px;
+    }
+  }
+    

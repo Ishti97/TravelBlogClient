@@ -1,0 +1,38 @@
+/* Style for single post container */
+.single-post {
+    max-width: 600px; /* Set maximum width */
+    margin: 0 auto; /* Center the post horizontally */
+    padding: 20px;
+    border: 1px solid #ccc; /* Add border */
+    border-radius: 10px; /* Add border radius for a rounded look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow for depth */
+    overflow: hidden; /* Hide overflow content */
+  }
+  
+  /* Style for post title */
+  h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for post image */
+  img {
+    width: 100%; /* Ensure the image width fits within the container */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 10px;
+    display: block; /* Ensure the image behaves as a block element */
+  }
+  
+  /* Style for post detail */
+  p {
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  /* Responsive Styles */
+  @media only screen and (max-width: 768px) {
+    .single-post {
+      padding: 10px;
+    }
+  }
+  

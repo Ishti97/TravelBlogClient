@@ -1,0 +1,62 @@
+/* Style for the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Style for table headers */
+  thead th {
+    background-color: #f2f2f2; /* Light Gray background */
+    border: 1px solid #ccc; /* Add border */
+    padding: 8px;
+    text-align: left;
+  }
+  
+  /* Style for table cells */
+  td {
+    border: 1px solid #ccc; /* Add border */
+    padding: 8px;
+  }
+  
+  /* Style for image in table */
+  table img {
+    max-width: 50px; /* Limit the image width */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  /* Responsive Styles */
+  @media only screen and (max-width: 768px) {
+    /* Stack table rows on smaller screens */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      display: block;
+    }
+  
+    /* Hide table headers */
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+  
+    /* Set cell padding */
+    td {
+      padding: 8px;
+      border-bottom: 1px solid #ccc; /* Add border bottom for each cell */
+      position: relative;
+    }
+  
+    /* Ensure each cell takes up full width */
+    td:before {
+      position: absolute;
+      top: 6px; /* Adjust vertical alignment */
+      left: 6px; /* Adjust horizontal alignment */
+      width: 45%; /* Set width of pseudo-element */
+      content: attr(data-label); /* Display the content of the data-label attribute */
+    }
+  }
+  
