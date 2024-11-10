@@ -1,7 +1,9 @@
 import axios from "axios";
+import { AxiosResponse } from "axios";
 axios.defaults.withCredentials = true;
 const baseUrl = "http://localhost:3000";
-const refreshToken = localStorage.getItem("refreshToken");
+// const refreshToken = localStorage.getItem("refreshToken");
+const refreshToken: string | null = localStorage.getItem("refreshToken");
 
 const register = async (email: string, password: string, role: string) => {
   try {
@@ -32,7 +34,7 @@ const log_out = async () => {
   }
 };
 
-const getNewToken = async (token) => {
+const getNewToken = async (token: string) => {
   try {
     const res = await axios.post(`${baseUrl}/user/token`, { token });
     return res;
@@ -47,7 +49,7 @@ const createNewPost = async (
   authorId: number,
   categoryId: number,
   image: File
-) => {
+) : Promise<AxiosResponse<any> | void> => {
   try {
     const formData = new FormData();
     formData.append("title", title);
@@ -66,10 +68,14 @@ const createNewPost = async (
       },
     });
     return res;
+
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
       try {
+        if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
+        
         if (newTokenResponse?.status === 200) {
           return await createNewPost(
             title,
@@ -79,48 +85,75 @@ const createNewPost = async (
             image
           );
         }
+      }
       } catch (error) {
         console.error("Error getting new token:", error);
       }
     } else {
       console.error("Error in getting post data:", error);
     }
+
+  }
   }
 };
 
-const deletePost = async (postId: number) => {
+const deletePost = async (postId: number): Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.delete(`${baseUrl}/post/delete/${postId}`);
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await deletePost(postId);
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
     } else {
       console.error("Error in getting post data:", error);
     }
-  }
+  }}
 };
 
-const updatePost = async (contentId, contentDetail: string) => {
+const updatePost = async (contentId:number, contentDetail: string): Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.patch(`${baseUrl}/post/update/${contentId}`, {
       detail: contentDetail,
     });
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await updatePost(contentId, contentDetail);
-        }
+        }}
+      } catch (error) {
+        console.error("Error getting new token:", error);
+      }
+    } else {
+      console.error("Error in getting post data:", error);
+    }}
+  }
+};
+
+const getCategory = async (): Promise<AxiosResponse<any> | void> => {
+  try {
+    const res = await axios.get(`${baseUrl}/category`);
+
+    return res;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+    if (error.response?.status === 500) {
+      try {if (refreshToken) {
+        const newTokenResponse = await getNewToken(refreshToken);
+        if (newTokenResponse?.status === 200) {
+          return await getCategory();
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -128,26 +161,6 @@ const updatePost = async (contentId, contentDetail: string) => {
       console.error("Error in getting post data:", error);
     }
   }
-};
-
-const getCategory = async () => {
-  try {
-    const res = await axios.get(`${baseUrl}/category`);
-
-    return res;
-  } catch (error) {
-    if (error.response?.status === 500) {
-      try {
-        const newTokenResponse = await getNewToken(refreshToken);
-        if (newTokenResponse?.status === 200) {
-          return await getCategory();
-        }
-      } catch (error) {
-        console.error("Error getting new token:", error);
-      }
-    } else {
-      console.error("Error in getting post data:", error);
-    }
   }
 };
 
@@ -156,12 +169,13 @@ const deleteCategory = async (categoryId: number) => {
     const res = await axios.delete(`${baseUrl}/category/delete/${categoryId}`);
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await deletePost(categoryId);
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -169,20 +183,22 @@ const deleteCategory = async (categoryId: number) => {
       console.error("Error in getting post data:", error);
     }
   }
+  }
 };
 
-const createNewCategory = async (name: string) => {
+const createNewCategory = async (name: string): Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.post(`${baseUrl}/category/create`, { name });
 
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 400) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await createNewCategory(name);
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -190,19 +206,21 @@ const createNewCategory = async (name: string) => {
       console.error("Error in getting post data:", error);
     }
   }
+  }
 };
 
-const fetchUnapprovedPosts = async () => {
+const fetchUnapprovedPosts = async () : Promise<AxiosResponse<any> | void>=> {
   try {
     const res = await axios.get(`${baseUrl}/post/unapproved/data`);
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await fetchUnapprovedPosts();
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -210,20 +228,21 @@ const fetchUnapprovedPosts = async () => {
       console.error("Error in getting post data:", error);
     }
   }
+  }
 };
 
-const fetchApprovedPosts = async () => {
+const fetchApprovedPosts = async (): Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.get(`${baseUrl}/post`);
     return res;
   } catch (error) {
-    console.log(error);
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await fetchApprovedPosts();
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -231,21 +250,23 @@ const fetchApprovedPosts = async () => {
       console.error("Error in getting post data:", error);
     }
   }
+  }
 };
 
-const fetchSinglePost = async (contentId: number) => {
+const fetchSinglePost = async (contentId: number) : Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.get(`${baseUrl}/post/${contentId}`);
 
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
 
         if (newTokenResponse?.status === 200) {
           return await fetchSinglePost(contentId);
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -253,21 +274,23 @@ const fetchSinglePost = async (contentId: number) => {
       console.error("Error in getting post data:", error);
     }
   }
+  }
 };
 
-const approvePost = async (postId: number) => {
+const approvePost = async (postId: number) : Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.patch(`${baseUrl}/post/approve/${postId}`, {
       published: 1,
     });
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await approvePost(postId);
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
@@ -275,26 +298,29 @@ const approvePost = async (postId: number) => {
       console.error("Error in getting post data:", error);
     }
   }
+  }
 };
 
-const pieChartData = async () => {
+const pieChartData = async () : Promise<AxiosResponse<any> | void> => {
   try {
     const res = await axios.get(`${baseUrl}/categories/chart`);
 
     return res.data;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await pieChartData();
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
     } else {
       console.error("Error in getting post data:", error);
     }
+  }
   }
 };
 
@@ -320,18 +346,20 @@ const getBookmark = async (userId: number) => {
 
     return res;
   } catch (error) {
+    if (axios.isAxiosError(error)) {
     if (error.response?.status === 500) {
-      try {
+      try {if (refreshToken) {
         const newTokenResponse = await getNewToken(refreshToken);
         if (newTokenResponse?.status === 200) {
           return await getCategory();
-        }
+        }}
       } catch (error) {
         console.error("Error getting new token:", error);
       }
     } else {
       console.error("Error in getting post data:", error);
     }
+  }
   }
 };
 

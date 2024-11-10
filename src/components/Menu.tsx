@@ -1,12 +1,23 @@
 import { getCategory } from "../axiosApi/handleAPI";
 import { useEffect, useState } from "react";
 
-const Menu = ({ onSelectCategory }) => {
-  const [contents, setContents] = useState([]);
+type Category = {
+ 
+  id: number,
+  name: string,
+};
+
+type ContentsProps = {
+  onSelectCategory: Function,
+}
+
+
+const Menu: React.FC<ContentsProps> = ({ onSelectCategory }) => {
+  const [contents, setContents] = useState<Category[]>([]);
 
   const fetchData = async () => {
     const data = await getCategory();
-    setContents(data.data.data);
+    setContents(data?.data.data);
   };
 
   useEffect(() => {

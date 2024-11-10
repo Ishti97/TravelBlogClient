@@ -8,7 +8,7 @@ import Missing from "./components/Missing.tsx";
 import Edit from "./pages/Edit.tsx";
 import Create from "./pages/Create.tsx";
 import SinglePost from "./pages/SinglePost";
-import Bookmark from "./pages/Bookmark.tsx";
+// import Bookmark from "./pages/Bookmark.tsx";
 
 import AdminPanel from "./pages/AdminPanel.tsx";
 import PieChart from "./pages/PieChart.tsx";
@@ -46,7 +46,7 @@ const App = () => {
           <Route path="create" element={<Create />} />
           <Route path="edit/:id" element={<Edit />} />
           <Route path="post/:id" element={<SinglePost />} />
-          <Route path="bookmark" element={<Bookmark />} />
+          {/* <Route path="bookmark" element={<Bookmark />} /> */}
 
           <Route path="adminpanel" element={<AdminPanel />} />
           <Route path="adminpanel/piechart" element={<PieChart />} />

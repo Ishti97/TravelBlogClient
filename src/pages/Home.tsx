@@ -25,7 +25,7 @@ const Home = () => {
     }
   }, []);
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(Number);
 
   // Handle category selection
   const handleSelectCategory = (categoryId: number) => {

@@ -5,15 +5,24 @@ import {
   deleteCategory,
   createNewCategory,
 } from "../axiosApi/handleAPI";
+
+
+type Category = {
+ 
+  id: number,
+  name: string,
+};
+
+
 const Category = () => {
-  const [contents, setContents] = useState([]);
+  const [contents, setContents] = useState<Category[]>([]);
 
   const [category, setCategory] = useState("");
-  const [error, setError] = useState("");
+  const [_error, setError] = useState("");
 
   const fetchData = async () => {
     const data = await getCategory();
-    setContents(data.data.data);
+    setContents(data?.data.data);
   };
 
   useEffect(() => {
@@ -33,15 +42,15 @@ const Category = () => {
     }
   };
 
-  const handleSubmit = async (name: string) => {
-    // e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    if (!name) {
+    if (!category) {
       setError("Not Fulfilled");
       return;
     }
     try {
-      createNewCategory(name);
+      createNewCategory(category);
     } catch (error) {
       console.error("Create error:");
     }

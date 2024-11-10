@@ -10,8 +10,19 @@ import { useNavigate } from "react-router-dom";
 
 import "../css/admin.css";
 
+type Post = {
+  categoryId: string,
+  id: number,
+  title: string,
+  image: string,
+  authorId: string | number,
+  detail: string,
+  // Add other properties if you remember them later
+};
+
+
 const AdminPanel = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [showApproved, setShowApproved] = useState(false);
 
   useEffect(() => {
@@ -23,7 +34,7 @@ const AdminPanel = () => {
       const res = showApproved
         ? await fetchApprovedPosts()
         : await fetchUnapprovedPosts();
-      setPosts(res.data?.allPosts || []);
+      setPosts(res?.data?.allPosts || []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

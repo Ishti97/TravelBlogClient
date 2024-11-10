@@ -7,9 +7,28 @@ import {
 import { useNavigate } from "react-router-dom";
 import ListItem from "./ListItem";
 
-const Contents = ({ user, id, filteredPosts }) => {
-  const [contents, setContents] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+type ContentsProps = {
+  id: number | string;
+  filteredPosts: number | string;
+  user:string;
+};
+
+type Post = {
+  categoryId: string,
+  id: number,
+  title: string,
+  image: string,
+  authorId: string | number,
+  detail: string,
+  // Add other properties if you remember them later
+};
+
+
+
+
+const Contents: React.FC<ContentsProps> = ({ id, filteredPosts })=> {
+  const [contents, setContents] = useState<Post[]>([]);
+  const [filteredData, setFilteredData] = useState<Post[]>([]);
   const [isFilterActive, setIsFilterActive] = useState(false);
 
   const navigate = useNavigate();
@@ -19,7 +38,8 @@ const Contents = ({ user, id, filteredPosts }) => {
 
   const fetchData = async () => {
     const data = await fetchApprovedPosts();
-    setContents(data.data.allPosts);
+    // setContents(data.data.allPosts);
+    setContents(data?.data?.allPosts || []);
   };
 
   useEffect(() => {
@@ -60,6 +80,7 @@ const Contents = ({ user, id, filteredPosts }) => {
   const handleRead = (contentId: number) => {
     navigate(`/post/${contentId}`);
   };
+
   const handleBookmark = async (contentId: number, userId: number) => {
     try {
      await createBookmark(contentId, userId);

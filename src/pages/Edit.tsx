@@ -8,7 +8,8 @@ const EditForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { id } = useParams(); // Get ID from URL parameter
+  const { id } = useParams<{ id: string }>(); // Assume the ID is a string // Get ID from URL parameter
+  const postId = id ? parseInt(id, 10) : NaN; // Convert to number or fallback to NaN if undefined
   const { contentDetail: initialContentDetail } = location.state;
 
   const [contentDetail, setContentDetail] = useState(initialContentDetail);
@@ -22,7 +23,7 @@ const EditForm = () => {
       return;
     }
     try {
-      const response = await updatePost(id, contentDetail);
+      const response = await updatePost(postId, contentDetail);
       if (response) {
         navigate(from, { replace: true });
       }

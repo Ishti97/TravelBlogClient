@@ -2,22 +2,33 @@ import React, { useEffect, useState } from "react";
 import { createNewPost, getCategory } from "../axiosApi/handleAPI";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../css/createPost.css";
+
+// Define a type for a Category
+type Category = {
+  id: number;
+  name: string;
+};
+
 const CreatePostForm = () => {
   const [title, setTitle] = useState("");
   const [detail, setDetail] = useState("");
-  const [authorId, setauthorId] = useState();
+  // const [authorId, setauthorId] = useState();
+  const [authorId, setauthorId] = useState<number | null>(null);
+
   const [categoryId, setCategoryId] = useState();
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState("");
 
-  const [existingCategory, setExistingCategory] = useState([]);
+  const [existingCategory, setExistingCategory] = useState<Category[]>([]);
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    // const userId = localStorage.getItem("userId");
+    const userId = parseInt(localStorage.getItem("userId") || "0", 10);
+
     if (userId) {
       setauthorId(userId);
     } else {
@@ -27,7 +38,7 @@ const CreatePostForm = () => {
 
   const fetchData = async () => {
     const data = await getCategory();
-    setExistingCategory(data.data.data);
+    setExistingCategory(data?.data.data);
   };
 
   useEffect(() => {
@@ -47,7 +58,7 @@ const CreatePostForm = () => {
         detail,
         authorId,
         categoryId,
-        image
+        image,
       );
       if (response) {
         console.log(`Create successfully: ${response}`);
@@ -59,7 +70,7 @@ const CreatePostForm = () => {
     }
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e:any) => {
     setImage(e.target.files[0]);
   };
 
@@ -94,7 +105,7 @@ const CreatePostForm = () => {
           <select
             id="category"
             value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
+            onChange={(e:any) => setCategoryId(e.target.value)}
             required
           >
             <option value="">Select a category</option>
